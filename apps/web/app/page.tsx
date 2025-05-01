@@ -1,6 +1,6 @@
 'use client'
-import ChatHeader from "@/components/ChatHeader";
-import MessageBubble from "@/components/MessageBubble";
+import ChatHeader from "@/components/ChatPage/ChatHeader";
+import MessageBubble from "@/components/ChatPage/MessageBubble";
 import { Send } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
