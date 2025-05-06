@@ -15,8 +15,6 @@ const Auth = ({isSignin} : {isSignin:boolean}) => {
         password: string,
         name?: string
     }
-
-    const [loading, setLoading] = useState(false)
     const router = useRouter()
     const{
         register,
@@ -34,8 +32,13 @@ const Auth = ({isSignin} : {isSignin:boolean}) => {
     const onsubmit:SubmitHandler<FormValues> = async (formData) => {
         try{
             const response = await axios.post(BACKEND_URL, formData)
-            const token = response.data.token
-            localStorage.setItem('token', token)
+            if(isSignin){
+                const token = response.data.token
+                localStorage.setItem('token', token)
+                router.push("/dashboard")
+            }else{
+                router.push("/signin")
+            }
             reset()
         }catch(error){
             console.log(`${isSignin ? "Signin Error" : "SignUp Error"}`)
@@ -43,7 +46,7 @@ const Auth = ({isSignin} : {isSignin:boolean}) => {
     }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4 sm:p-6 md:p-8">
+    <div className="min-h-screen w-full bg-black flex items-center justify-center p-4 sm:p-6 md:p-8">
       <div className="w-full max-w-md">
             {/* Login Card */}
             <div className='p-5 bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden backdrop-blur-sm backdrop-filter border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-2xl'>
