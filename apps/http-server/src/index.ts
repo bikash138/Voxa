@@ -15,6 +15,7 @@ app.get("/", (req,res)=>{
     res.send("HI THERE")
 })
 
+//SIGNUP ROUTE
 app.post("/signup", async (req,res)=>{
     try{
         const parsedData = SignUpSchema.safeParse(req.body)
@@ -60,7 +61,7 @@ app.post("/signin", async (req,res)=>{
             },
             select:{
                 password: true,
-                id: true
+                id: true,
             }
         })
         if(!user){
@@ -80,7 +81,7 @@ app.post("/signin", async (req,res)=>{
             throw new Error("JWT_SECRET Not Found")
         }
         const token = jwt.sign({
-            userId: user?.id
+            userId: user?.id,
         }, JWT_SECRET)
 
         res.status(200).json({
@@ -96,6 +97,7 @@ app.post("/signin", async (req,res)=>{
     }
 })
 
+//CREATE ROOM ROUTE
 app.post("/createRoom", middleware, async (req,res)=>{
     try{
         const parsedData = CreateRoomSchema.safeParse(req.body)
@@ -127,6 +129,7 @@ app.post("/createRoom", middleware, async (req,res)=>{
     }
 })
 
+//JOIN ROOM ROUTE
 app.get("/joinRoom/:slug", middleware, async (req,res)=>{
     try{
         const slug = req.params.slug
@@ -146,6 +149,34 @@ app.get("/joinRoom/:slug", middleware, async (req,res)=>{
             message: "Internal Server Error",
             error: error
         })
+    }
+})
+
+//GET USER DETAILS ROUTE
+app.get("/userDetails", middleware, async (req,res)=>{
+    try{
+        //@ts-ignore
+        const userId = req?.userId
+        if(!userId){
+            throw new Error("User is not authenticated")
+        }
+        const userDetails = await prismaClient.user.findFirst({
+            where:{
+                id: userId
+            },
+            select:{
+                name: true,
+                photo: true,
+                rooms: true,
+                chats: true
+            }
+        })
+        res.status(200).json({
+            message: "User fetched successfully",
+            userDetails
+        })
+    }catch(error){
+
     }
 })
 
