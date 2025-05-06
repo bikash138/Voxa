@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 const Auth = ({isSignin} : {isSignin:boolean}) => {
 
@@ -135,7 +136,7 @@ const Auth = ({isSignin} : {isSignin:boolean}) => {
                                 overflow-hidden group"
                     >
                      
-                        <span className="relative inline-flex items-center">
+                        <span className="relative inline-flex items-center group">
                             <span>{isSignin ? "Signin" : "Signup"}</span>
                             <ArrowRight 
                             size={18} 
@@ -143,6 +144,25 @@ const Auth = ({isSignin} : {isSignin:boolean}) => {
                             />
                         </span>
                     </button>
+                    {
+                        isSignin 
+                            ? <div className="mt-4 text-center">
+                                <Link 
+                                href="/signup" 
+                                className="text-md font-medium text-blue-400 hover:text-purple-500 focus:outline-none transition-all duration-300"
+                                >
+                                Create an account
+                                </Link>
+                            </div> 
+                            : <div className="mt-4 text-center">
+                                <Link 
+                                href="/signin" 
+                                className="text-md font-medium text-blue-400 hover:text-purple-500 focus:outline-none transition-all duration-300"
+                                >
+                                Already have an account?
+                                </Link>
+                            </div>
+                    }
                 </form>
             </div>
         </div>
