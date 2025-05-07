@@ -1,11 +1,15 @@
+"use client"
 import Auth from '@/components/Auth/Auth'
 import React from 'react'
+import { RecoilRoot } from 'recoil'
 
 const page = () => {
   return (
-    <div>
+    <RecoilRoot>
+      <div>
         <Auth isSignin={true}/>
-    </div>
+      </div>
+    </RecoilRoot>
   )
 }
 

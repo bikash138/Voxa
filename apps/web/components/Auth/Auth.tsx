@@ -6,6 +6,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { userAtom } from '@/Recoil/userAtom'
+import { useSetRecoilState } from 'recoil'
 
 const Auth = ({isSignin} : {isSignin:boolean}) => {
 
@@ -17,6 +19,7 @@ const Auth = ({isSignin} : {isSignin:boolean}) => {
         name?: string
     }
     const router = useRouter()
+    const setUser = useSetRecoilState(userAtom)
     const{
         register,
         handleSubmit,
@@ -36,6 +39,15 @@ const Auth = ({isSignin} : {isSignin:boolean}) => {
             if(isSignin){
                 const token = response.data.token
                 localStorage.setItem('token', token)
+                const userResponse = await axios.get("http://localhost:4000/userDetails", {
+                    headers: {
+                    Authorization: `${token}`
+                    }
+                })
+                const {name, email} = userResponse.data?.userDetails
+                localStorage.setItem('name', name)
+                localStorage.setItem('email', email)
+                setUser(userResponse.data?.userDetails) 
                 router.push("/dashboard")
             }else{
                 router.push("/signin")

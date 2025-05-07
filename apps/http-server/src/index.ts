@@ -82,17 +82,17 @@ app.post("/signin", async (req,res)=>{
         }
         const token = jwt.sign({
             userId: user?.id,
-        }, JWT_SECRET)
+        }, JWT_SECRET, {expiresIn: "48h"})
 
         res.status(200).json({
             message: "Sign In Success, User Logged In",
-            token
+            token,
         })
     }catch(error){
         console.log(error)
         res.status(500).json({
             message: "Internal Server Error",
-            error: error
+            error: error,
         })
     }
 })
@@ -165,6 +165,7 @@ app.get("/userDetails", middleware, async (req,res)=>{
                 id: userId
             },
             select:{
+                email: true,
                 name: true,
                 photo: true,
                 rooms: true,

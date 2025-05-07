@@ -1,10 +1,9 @@
 'use client'
 import ChatHeader from "@/components/ChatPage/ChatHeader";
 import MessageBubble from "@/components/ChatPage/MessageBubble";
-import NavBar from "@/components/NavBar/NavBar";
-import { Send } from "lucide-react";
-import { useParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { LogOut, Send } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 const URL = "ws://localhost:8080"
 
@@ -29,9 +28,10 @@ export default function page() {
   })
   //@ts-ignore
   const wsRef = useRef<WebSocket | null>()
-  const [messages, setMessage] = useState([""])
-
-
+  const [messages, setMessage] = useState([""])  
+  const router = useRouter()
+  const name = localStorage.getItem('name')
+  
   const sendMessage= (formData: formDataType) => {
     if(!wsRef.current){
       throw new Error("WsRef Missing")
@@ -62,18 +62,22 @@ export default function page() {
     return () => {
       ws.close()
     }
-  },[])
-  
-  //@ts-ignore
-  
-  
+  },[])  
   
   return (
     
         // <div className="bg-black shadow-xl overflow-hidden min-h-screen md:h-screen">
           <div className="min-h-screen min-w-screen bg-gray-900 flex flex-col justify-center" >
+            <button
+              onClick={()=>{
+                wsRef.current?.close()
+                router.push("/dashboard")
+              }}
+              className="cursor-pointer text-gray-200 hover:text-blue-500 transition-colors">
+                <LogOut size={20} />
+            </button>
             {/* Chat Header */}
-            <div className="h-[15%]"><ChatHeader/></div>
+            <div className="h-[15%]"><ChatHeader name={name || "Guest"}/></div>
 
           {/* ChatContainer */}
             <div className="flex flex-col h-96 bg-gray-900 shadow-lg overflow-hidden">
