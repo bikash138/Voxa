@@ -5,7 +5,6 @@ import { LogOut, Send } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-const URL = "ws://localhost:8080"
 
 
 export default function page() {
@@ -46,6 +45,8 @@ export default function page() {
 
   
   useEffect(()=>{
+    const token = localStorage.getItem('token')
+    const URL = `ws://192.168.0.171:8080?token=${token}`; 
     const ws = new WebSocket(URL)
     ws.onmessage = (a) => {
       setMessage(m => [...m, a.data])
@@ -107,7 +108,7 @@ export default function page() {
                 type="text"
                 {...register("message")}
                 placeholder="Type a message..."
-                className=" text-white flex-1 py-2 px-4 rounded-full border border-gray-500 focus:outline-none focus:ring-8 focus:ring-red-300 focus:border-gray-400 duration-100 transition-all"
+                className=" text-white flex-1 py-2 px-4 rounded-full border border-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 duration-100 transition-all"
                 />
                 <button>
                 <Send size={18} className="text-blue-400"/>

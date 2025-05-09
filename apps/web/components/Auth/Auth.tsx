@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowRight, Eye, Lock, Mail, User } from 'lucide-react'
-import React, { useState } from 'react'
+import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
@@ -11,7 +11,7 @@ import { useSetRecoilState } from 'recoil'
 
 const Auth = ({isSignin} : {isSignin:boolean}) => {
 
-    const BACKEND_URL = `${isSignin ? "http://localhost:4000/signin" : "http://localhost:4000/signup"}`
+    const BACKEND_URL = `${isSignin ? "http://192.168.0.171:4000/signin" : "http://192.168.0.171:4000/signup"}`
 
     interface FormValues{
         email: string,
@@ -39,7 +39,7 @@ const Auth = ({isSignin} : {isSignin:boolean}) => {
             if(isSignin){
                 const token = response.data.token
                 localStorage.setItem('token', token)
-                const userResponse = await axios.get("http://localhost:4000/userDetails", {
+                const userResponse = await axios.get("http://192.168.0.171:4000/userDetails", {
                     headers: {
                     Authorization: `${token}`
                     }

@@ -1,7 +1,14 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const NavBar = () => {
+
+  const[token, setToken] = useState<string | null>(null)
+
+  useEffect(()=>{
+    const token = localStorage.getItem('token')
+    setToken(token || null)
+  }, [])
 
   const navlink = [
     {
@@ -37,11 +44,20 @@ const NavBar = () => {
         }
       </div>
       <div className=' bg-gray-900 flex items-center justify-center rounded-full'>
-        <Link href="/signin">
-          <button className="cursor-pointer bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-blue-500/20">
-            Signin
-          </button>
-        </Link>
+
+        {
+          token 
+          ? <Link href="/dashboard">
+              <button className="cursor-pointer bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-blue-500/20">
+                Dashboard
+              </button>
+            </Link> 
+          : <Link href="/signin">
+              <button className="cursor-pointer bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-blue-500/20">
+                Signin
+              </button>
+            </Link>
+        }
       </div>
     </div>
   )

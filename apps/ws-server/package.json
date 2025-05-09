@@ -13,6 +13,7 @@
   "description": "",
   "dependencies": {
     "@repo/typescript-config": "workspace:*",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.15.3",
     "@types/ws": "^8.18.1",
     "tsc-watch": "^6.2.1",

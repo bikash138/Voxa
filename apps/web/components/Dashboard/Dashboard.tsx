@@ -4,21 +4,20 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import ConfirmationModal from '../Common/ConfirmationModal'
 import { useRouter } from 'next/navigation'
-import axios from 'axios'
 import { userAtom } from '@/Recoil/userAtom'
-import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil'
+import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 const Dashboard = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const router = useRouter()
   const name = localStorage.getItem('name')
-  // const user = useRecoilState(userAtom)  
+  const user = useRecoilValue(userAtom) 
+  console.log(user) 
 
 
   return (
     <>
-    <RecoilRoot>
       <div className="min-h-screen w-full bg-black flex items-center justify-center p-4 sm:p-6 md:p-8">
         <div className="w-full max-w-md">
         <h1 className="text-3xl font-bold text-blue-400 text-center mb-6">
@@ -90,6 +89,8 @@ const Dashboard = () => {
         onClose={() => setIsModalOpen(false)}
         onConfirm={() => {
           localStorage.removeItem('token')
+          localStorage.removeItem('email')
+          localStorage.removeItem('name')
           router.push("/")
         }}
         title="Logout"
@@ -97,7 +98,6 @@ const Dashboard = () => {
         confirmText = 'Logout'
         cancelText = 'Cancel'
       />
-      </RecoilRoot>
     </>
   )
 }

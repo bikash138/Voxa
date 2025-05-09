@@ -7,7 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 const page = () => {
 
-    const BACKEND_URL = "http://localhost:4000/joinRoom"
+    const BACKEND_URL = "http://192.168.0.171:4000/joinRoom"
 
     interface FormValues {
         slug: string
@@ -33,7 +33,6 @@ const page = () => {
                 console.log("Room Joined Successfully")
             }
             const roomId = response.data.room.id
-            console.log(roomId)
             reset()
             router.push(`/chat/${roomId}`)
         }

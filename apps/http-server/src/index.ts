@@ -4,6 +4,7 @@ import express from 'express'
 import cors from "cors"
 import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken"
+import { redisClient } from "@repo/redis/redisClient"
 import middleware from "./middleware"
 const JWT_SECRET = 'bikash'
 
@@ -181,8 +182,21 @@ app.get("/userDetails", middleware, async (req,res)=>{
     }
 })
 
+// app.get("/redis", async (req,res)=>{
+//     await redisClient.lpush("messages", 1)
+//     await redisClient.lpush("messages", 2)
+//     await redisClient.lpush("messages", 3)
+//     await redisClient.lpush("messages", 4)
+//     // const result = await redisClient.rpop("messages")
+//     const result = await redisClient.llen("messages")
+//     console.log(result)
+//     res.status(200).json({
+//         result
+//     })
+// })
+
 const PORT = process.env.PORT || 4000
-app.listen(PORT, ()=>{
+app.listen(4000, '0.0.0.0', ()=>{
     console.log(`Server is up at PORT ${PORT}`)
 })
 
