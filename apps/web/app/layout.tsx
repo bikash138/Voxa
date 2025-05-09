@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import RecoilProvider from "./recoilProvider";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,18 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
             {children}
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                style:{
+                background: "#1f2937", // Dark background
+                color: "#ffffff", // White text
+                border: "1px solid #4f46e5", // Add a border
+                borderRadius: "8px", // Rounded corners
+                padding: "16px", // Add padding
+                }
+              }}
+              />
         </body>
         </RecoilProvider>
       </html>

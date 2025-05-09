@@ -1,5 +1,5 @@
 'use client'
-import { ArrowRight, Router } from 'lucide-react'
+import { ArrowRight, Router, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import ConfirmationModal from '../Common/ConfirmationModal'
@@ -12,8 +12,8 @@ const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const router = useRouter()
   const name = localStorage.getItem('name')
-  const user = useRecoilValue(userAtom) 
-  console.log(user) 
+  // const user = useRecoilValue(userAtom) 
+  // console.log(user) 
 
 
   return (
@@ -63,23 +63,42 @@ const Dashboard = () => {
                     </button>
                 </Link>
 
-                {/* Logout Button */}
+                {/* Delete Room */}
+                <Link href="/deleteRoom">
                   <button
-                    onClick={()=>setIsModalOpen(true)}
-                    className="w-full mt-4 mb-4 cursor-pointer flex justify-center items-center 
-                            py-2.5 px-4 bg-blue-500 hover:bg-blue-600 focus:ring-4 
-                            focus:ring-blue-300 dark:focus:ring-blue-700 text-white 
-                            font-medium rounded-lg transition-all duration-200 
-                            overflow-hidden group"
+                        className="w-full mt-4 mb-4 cursor-pointer flex justify-center items-center 
+                                py-2.5 px-4 bg-pink-500 hover:bg-pink-700 focus:ring-4 
+                                focus:ring-blue-300 dark:focus:ring-blue-800 text-white 
+                                font-medium rounded-lg transition-all duration-200 
+                                overflow-hidden group"
                     >
-                      <span className="relative inline-flex items-center">
-                          <span>Logout</span>
-                          <ArrowRight 
-                          size={18} 
-                          className="ml-2 group-hover:translate-x-1 transition-transform duration-200" 
-                          />
-                      </span>
-                  </button>
+                        <span className="relative inline-flex items-center">
+                            <span>Delete Room</span>
+                            <Trash2 
+                            size={18} 
+                            className="ml-2 group-hover:translate-x-1 transition-transform duration-200" 
+                            />
+                        </span>
+                    </button>
+                </Link>
+
+                {/* Logout Button */}
+                <button
+                  onClick={()=>setIsModalOpen(true)}
+                  className="w-full mt-4 mb-4 cursor-pointer flex justify-center items-center 
+                          py-2.5 px-4 bg-blue-500 hover:bg-blue-600 focus:ring-4 
+                          focus:ring-blue-300 dark:focus:ring-blue-700 text-white 
+                          font-medium rounded-lg transition-all duration-200 
+                          overflow-hidden group"
+                  >
+                    <span className="relative inline-flex items-center">
+                        <span>Logout</span>
+                        <ArrowRight 
+                        size={18} 
+                        className="ml-2 group-hover:translate-x-1 transition-transform duration-200" 
+                        />
+                    </span>
+                </button>
               </div>
           </div>
       </div>

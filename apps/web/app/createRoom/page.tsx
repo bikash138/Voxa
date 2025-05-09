@@ -1,13 +1,18 @@
 'use client'
-import axios from 'axios'
+import { roomEndpoints } from '@/services/apis'
+import { apiConnector } from '@/services/axios'
+import axios, { AxiosRequestHeaders } from 'axios'
 import { ArrowRight, Mail } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 const page = () => {
 
-    const BACKEND_URL = "http://192.168.0.171:4000/createRoom"
+    const {
+        CREATE_ROOM
+    } = roomEndpoints
 
     interface FormValues {
         slug: string
@@ -23,16 +28,18 @@ const page = () => {
 
     const onsubmit:SubmitHandler<FormValues> = async (formData) => {
         try{
+            const toastId = toast.loading("Loading...")
             const token = localStorage.getItem("token")
-            const response = await axios.post(BACKEND_URL, formData, {
-                headers:{
+            const response = await apiConnector("POST", CREATE_ROOM, formData,
+                {
                     Authorization: `${token}`
-                }
-            })
-            if(response.data.success){
-                console.log("Room Created Successfully")
+                } as AxiosRequestHeaders
+            )
+            if(response?.success){
+                toast.success("Room Created")
             }
             reset()
+            toast.dismiss(toastId)
             router.push("/joinRoom")
         }
         catch(error){

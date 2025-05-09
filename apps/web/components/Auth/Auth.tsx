@@ -1,29 +1,39 @@
 'use client'
-
 import { ArrowRight, Eye, Lock, Mail, User } from 'lucide-react'
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import axios from 'axios'
+import { AxiosRequestHeaders } from 'axios'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { userAtom } from '@/Recoil/userAtom'
 import { useSetRecoilState } from 'recoil'
+import { toast } from 'sonner'
+import { apiConnector } from '@/services/axios'
+import { authEndpoints, userEndpoints } from '@/services/apis'
 
 const Auth = ({isSignin} : {isSignin:boolean}) => {
+    //API ENDPOINTS
+    const {
+        SIGNUP_API,
+        SIGNIN_API
+    } = authEndpoints
+    const{
+        USER_DETAILS_API
+    } = userEndpoints
 
-    const BACKEND_URL = `${isSignin ? "http://192.168.0.171:4000/signin" : "http://192.168.0.171:4000/signup"}`
-
+    //INTERFACE
     interface FormValues{
         email: string,
         password: string,
         name?: string
     }
+
+    const URL = `${isSignin ? SIGNIN_API : SIGNUP_API}`
     const router = useRouter()
     const setUser = useSetRecoilState(userAtom)
     const{
         register,
         handleSubmit,
-        reset,
         formState: {errors, isSubmitting}
     } = useForm<FormValues>({
         defaultValues: {
@@ -35,24 +45,24 @@ const Auth = ({isSignin} : {isSignin:boolean}) => {
 
     const onsubmit:SubmitHandler<FormValues> = async (formData) => {
         try{
-            const response = await axios.post(BACKEND_URL, formData)
+            const toastId = toast.loading("Loading...")
+            const response = await apiConnector("POST", URL, formData)
             if(isSignin){
-                const token = response.data.token
+                const token = response?.token
                 localStorage.setItem('token', token)
-                const userResponse = await axios.get("http://192.168.0.171:4000/userDetails", {
-                    headers: {
+                const userResponse = await apiConnector("GET", USER_DETAILS_API, undefined, {
                     Authorization: `${token}`
-                    }
-                })
-                const {name, email} = userResponse.data?.userDetails
+                } as AxiosRequestHeaders)
+                const {name, email} = userResponse?.userDetails
                 localStorage.setItem('name', name)
                 localStorage.setItem('email', email)
-                setUser(userResponse.data?.userDetails) 
+                setUser(userResponse?.userDetails) 
+                toast.dismiss(toastId)
                 router.push("/dashboard")
             }else{
+                toast.dismiss(toastId)
                 router.push("/signin")
             }
-            reset()
         }catch(error){
             console.log(`${isSignin ? "Signin Error" : "SignUp Error"}`)
         }
@@ -61,7 +71,7 @@ const Auth = ({isSignin} : {isSignin:boolean}) => {
   return (
     <div className="min-h-screen w-full bg-black flex items-center justify-center p-4 sm:p-6 md:p-8">
       <div className="w-full max-w-md">
-            {/* Login Card */}
+            {/* Login Form */}
             <div className='p-5 bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden backdrop-blur-sm backdrop-filter border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-2xl'>
                 <form onSubmit={handleSubmit(onsubmit)}>
                 {/* Email Input */}

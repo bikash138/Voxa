@@ -25,9 +25,9 @@ const page = () => {
   if (isSignedin) {
     return (
       <>
-          <div>
-            <Dashboard />
-          </div>
+        <div>
+          <Dashboard />
+        </div>
       </>
     );
   } else {

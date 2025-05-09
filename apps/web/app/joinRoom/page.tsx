@@ -1,14 +1,20 @@
 'use client'
-import axios from 'axios'
-import { ArrowRight, Mail } from 'lucide-react'
+import { roomEndpoints } from '@/services/apis'
+import { apiConnector } from '@/services/axios'
+import { AxiosRequestHeaders } from 'axios'
+import { ArrowRight, Mail, MessageSquareMore } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 const page = () => {
+    //ENDPOINTS
+    const {
+        JOIN_ROOM
+    } = roomEndpoints
 
-    const BACKEND_URL = "http://192.168.0.171:4000/joinRoom"
-
+    //INTERFACES
     interface FormValues {
         slug: string
     }
@@ -23,17 +29,19 @@ const page = () => {
 
     const onsubmit:SubmitHandler<FormValues> = async (formData) => {
         try{
+            const toastId = toast.loading("Loading...")
             const token = localStorage.getItem("token")
-            const response = await axios.get(`${BACKEND_URL}/${formData.slug}`, {
-                headers:{
+            const response = await apiConnector("GET", `${JOIN_ROOM}/${formData.slug}`, undefined,
+                {
                     Authorization: `${token}`
-                }
-            })
-            if(response.data.success){
-                console.log("Room Joined Successfully")
+                } as AxiosRequestHeaders
+            )
+            const roomId = response?.room.id
+            if(response?.success){
+                console.log(`Room ${formData.slug} with roomId ${roomId} Joined Successfully`)
             }
-            const roomId = response.data.room.id
             reset()
+            toast.dismiss(toastId)
             router.push(`/chat/${roomId}`)
         }
         catch(error){
@@ -51,7 +59,7 @@ const page = () => {
                     <div className="mb-5">
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <Mail size={18} className="text-gray-400" />
+                            <MessageSquareMore size={18} className="text-gray-400" />
                             </div>
                             
                             <input
@@ -67,13 +75,12 @@ const page = () => {
                     <button
                         disabled={isSubmitting}
                         type="submit"
-                        className="w-full mt-8 cursor-pointer flex justify-center items-center 
+                        className="w-full mt-4 cursor-pointer flex justify-center items-center 
                                 py-2.5 px-4 bg-blue-500 hover:bg-blue-600 focus:ring-4 
-                                focus:ring-blue-300 dark:focus:ring-blue-700 text-white 
+                                focus:ring-blue-700 text-white 
                                 font-medium rounded-lg transition-all duration-200 
-                                overflow-hidden group"
+                                overflow-hidden group" 
                     >
-                     
                         <span className="relative inline-flex items-center">
                             <span>Join Room</span>
                             <ArrowRight
