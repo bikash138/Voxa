@@ -1,27 +1,28 @@
 'use client'
 import { ArrowRight, Router, Trash2 } from 'lucide-react'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import ConfirmationModal from '../Common/ConfirmationModal'
 import { useRouter } from 'next/navigation'
-import { userAtom } from '@/Recoil/userAtom'
-import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useSelector } from 'react-redux'
+import { RootState } from "../../redux/store"
+import { useDispatch } from 'react-redux'
+import { clearUser } from '@/redux/slices/userSlice'
+
 
 const Dashboard = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const router = useRouter()
-  const name = localStorage.getItem('name')
-  // const user = useRecoilValue(userAtom) 
-  // console.log(user) 
-
+  const dispatch = useDispatch()
+  const user = useSelector((state: RootState)=>state.user.user)
 
   return (
     <>
       <div className="min-h-screen w-full bg-black flex items-center justify-center p-4 sm:p-6 md:p-8">
         <div className="w-full max-w-md">
         <h1 className="text-3xl font-bold text-blue-400 text-center mb-6">
-          Welcome, <span className="text-purple-500">{name || "Guest"}!</span>
+          Welcome, <span className="text-purple-500">{user?.name || "Guest"}!</span>
         </h1>
               {/* Login Card */}
               <div className='p-5 bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden backdrop-blur-sm backdrop-filter border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-2xl'>
@@ -108,8 +109,8 @@ const Dashboard = () => {
         onClose={() => setIsModalOpen(false)}
         onConfirm={() => {
           localStorage.removeItem('token')
-          localStorage.removeItem('email')
-          localStorage.removeItem('name')
+          dispatch(clearUser())
+          console.log(user)
           router.push("/")
         }}
         title="Logout"

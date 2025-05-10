@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { MessageSquare, Zap, Shield, Users } from 'lucide-react';
 import Link from 'next/link';
 
 
 const HomePage = () => {
-
 
     const cardData = [
         {

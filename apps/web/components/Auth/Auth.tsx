@@ -5,11 +5,13 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { AxiosRequestHeaders } from 'axios'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { userAtom } from '@/Recoil/userAtom'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { toast } from 'sonner'
 import { apiConnector } from '@/services/axios'
 import { authEndpoints, userEndpoints } from '@/services/apis'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from '@/redux/slices/userSlice'
+import { RootState } from '@/redux/store'
 
 const Auth = ({isSignin} : {isSignin:boolean}) => {
     //API ENDPOINTS
@@ -30,7 +32,8 @@ const Auth = ({isSignin} : {isSignin:boolean}) => {
 
     const URL = `${isSignin ? SIGNIN_API : SIGNUP_API}`
     const router = useRouter()
-    const setUser = useSetRecoilState(userAtom)
+    const dispatch = useDispatch()
+    
     const{
         register,
         handleSubmit,
@@ -53,10 +56,9 @@ const Auth = ({isSignin} : {isSignin:boolean}) => {
                 const userResponse = await apiConnector("GET", USER_DETAILS_API, undefined, {
                     Authorization: `${token}`
                 } as AxiosRequestHeaders)
-                const {name, email} = userResponse?.userDetails
-                localStorage.setItem('name', name)
-                localStorage.setItem('email', email)
-                setUser(userResponse?.userDetails) 
+
+                dispatch(setUser({...userResponse?.userDetails}))
+                
                 toast.dismiss(toastId)
                 router.push("/dashboard")
             }else{
