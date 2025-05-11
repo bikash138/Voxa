@@ -54,12 +54,7 @@ ws.on('connection', (socket, req)=>{
         if(parsedMessage.type == 'chat'){
             console.log("User Want to Chat")
             console.log(parsedMessage)
-            const queueItem = {
-                userId: userId,
-                message: parsedMessage.payload.message,
-                timestamp: Date.now()
-            }
-            await redisClient.lpush("ws_message_queue", JSON.stringify(queueItem))
+            
             //@ts-ignore
             const currentUserRoomId = allSockets.find((user) => user.socket === socket)?.room
             //@ts-ignore
@@ -68,6 +63,13 @@ ws.on('connection', (socket, req)=>{
                 .filter((user) => user.room === currentUserRoomId)
                 //@ts-ignore
                 .forEach((user) => user.socket.send(parsedMessage.payload.message))
+
+            const queueItem = {
+                userId: userId,
+                message: parsedMessage.payload.message,
+                roomId: currentUserRoomId
+            }
+            await redisClient.lpush("messages", JSON.stringify(queueItem))
         
         }
     })
