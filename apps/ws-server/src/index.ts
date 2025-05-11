@@ -1,5 +1,6 @@
 import { WebSocketServer } from "ws";
 import jwt from "jsonwebtoken"
+import {redisClient} from "@repo/redis/redisClient"
 const JWT_SECRET = 'bikash'
 
 const PORT = 8080
@@ -41,7 +42,7 @@ ws.on('connection', (socket, req)=>{
 
     console.log("User Connected")
 
-    socket.on("message", (message)=>{
+    socket.on("message", async (message)=>{
         const parsedMessage = JSON.parse(message as unknown as string)
         if(parsedMessage.type == 'join-room'){
             const roomId = parsedMessage.payload.roomId
@@ -53,6 +54,12 @@ ws.on('connection', (socket, req)=>{
         if(parsedMessage.type == 'chat'){
             console.log("User Want to Chat")
             console.log(parsedMessage)
+            const queueItem = {
+                userId: userId,
+                message: parsedMessage.payload.message,
+                timestamp: Date.now()
+            }
+            await redisClient.lpush("ws_message_queue", JSON.stringify(queueItem))
             //@ts-ignore
             const currentUserRoomId = allSockets.find((user) => user.socket === socket)?.room
             //@ts-ignore
@@ -61,6 +68,7 @@ ws.on('connection', (socket, req)=>{
                 .filter((user) => user.room === currentUserRoomId)
                 //@ts-ignore
                 .forEach((user) => user.socket.send(parsedMessage.payload.message))
+        
         }
     })
     socket.on('close', ()=>{

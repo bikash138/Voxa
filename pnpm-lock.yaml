@@ -130,8 +130,23 @@ importers:
         specifier: ^5
         version: 5.8.2
 
+  apps/worker:
+    devDependencies:
+      '@repo/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      '@repo/redis':
+        specifier: workspace:*
+        version: link:../../packages/redis
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
+
   apps/ws-server:
     dependencies:
+      '@repo/redis':
+        specifier: workspace:*
+        version: link:../../packages/redis
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
@@ -210,6 +225,9 @@ importers:
 
   packages/redis:
     dependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
       ioredis:
         specifier: ^5.6.1
         version: 5.6.1

@@ -182,6 +182,7 @@ app.get("/userDetails", middleware, async (req,res)=>{
     }
 })
 
+
 // app.get("/redis", async (req,res)=>{
 //     await redisClient.lpush("messages", 1)
 //     await redisClient.lpush("messages", 2)
