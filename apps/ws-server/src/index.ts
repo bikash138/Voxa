@@ -60,7 +60,7 @@ ws.on('connection', (socket, req)=>{
             //@ts-ignore
             allSockets
             //@ts-ignore
-                .filter((user) => user.room === currentUserRoomId)
+                .filter((user) => user.room === currentUserRoomId && user.socket !== socket)
                 //@ts-ignore
                 .forEach((user) => user.socket.send(parsedMessage.payload.message))
 

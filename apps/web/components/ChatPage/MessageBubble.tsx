@@ -1,10 +1,10 @@
 import React from 'react'
 
-const MessageBubble = ({message}:{message:any}) => {
+const MessageBubble = ({message, isCurrentUser}:{message:any, isCurrentUser:any}) => {
   return (
 
      <div 
-      className={`flex gap-2 mb-4 items-end justify-end`}
+      className={`flex gap-2 mb-4 ${isCurrentUser ? "justify-end" : "justify-start"}`}
     >
       {/* {!isCurrentUser && <UserAvatar user={otherUser} size="sm" />} */}
       
