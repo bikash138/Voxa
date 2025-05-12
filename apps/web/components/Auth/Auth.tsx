@@ -1,6 +1,6 @@
 'use client'
-import { ArrowRight, Eye, Lock, Mail, User } from 'lucide-react'
-import React from 'react'
+import { ArrowRight, Eye, EyeOff, Lock, Mail, User } from 'lucide-react'
+import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { AxiosRequestHeaders } from 'axios'
 import { useRouter } from 'next/navigation'
@@ -33,6 +33,7 @@ const Auth = ({isSignin} : {isSignin:boolean}) => {
     const URL = `${isSignin ? SIGNIN_API : SIGNUP_API}`
     const router = useRouter()
     const dispatch = useDispatch()
+    const[passwordVisible, setPasswordVisible] = useState(false)
     
     const{
         register,
@@ -78,74 +79,83 @@ const Auth = ({isSignin} : {isSignin:boolean}) => {
                 <form onSubmit={handleSubmit(onsubmit)}>
                 {/* Email Input */}
                 <div className="mb-5">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Email
-                </label>
-                <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail size={18} className="text-gray-400" />
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Email
+                    </label>
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Mail size={18} className="text-gray-400" />
+                        </div>
+                        
+                        <input
+                        {...register('email',{ required: 'Email is required' })}
+                        type="email"
+                        className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-gray-900 dark:text-white bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:placeholder-gray-500 transition-all duration-200"
+                        placeholder="name@example.com"
+                        />   
                     </div>
-                    
-                    <input
-                    {...register('email',{ required: 'Email is required' })}
-                    type="email"
-                    className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-gray-900 dark:text-white bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:placeholder-gray-500 transition-all duration-200"
-                    placeholder="name@example.com"
-                    />
                     {errors.email && <p className='text-red-500 text-sm'>{errors.email.message}</p>}
-                </div>
                 </div>
 
                 {/* Password Input */}
                 <div className="mb-5">
-                <div className="flex justify-between mb-1">
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Password
-                    </label>
-                    <button type="button" className="text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 focus:outline-none transition-colors duration-200">
-                    Forgot password?
-                    </button>
-                </div>
-                <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock size={18} className="text-gray-400" />
+                    <div className="flex justify-between mb-1">
+                        <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Password
+                        </label>
+                        <button type="button" className="text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 focus:outline-none transition-colors duration-200">
+                        Forgot password?
+                        </button>
                     </div>
-                    <input
-                    {...register('password',{ required: 'Password is required' })}
-                    type="password"
-                    id="password"
-                    className="block w-full pl-10 pr-10 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-gray-900 dark:text-white bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:placeholder-gray-500 transition-all duration-200"
-                    placeholder="••••••••"
-                    />
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Lock size={18} className="text-gray-400" />
+                        </div>
+                        <input
+                        {...register('password',{ required: 'Password is required' })}
+                        type={`${passwordVisible ? "text" : "password" }`}
+                        id="password"
+                        className="block w-full pl-10 pr-10 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-gray-900 dark:text-white bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:placeholder-gray-500 transition-all duration-200"
+                        placeholder="••••••••"
+                        />
+                        {
+                            passwordVisible 
+                            ?<div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <button type="button" onClick={()=>setPasswordVisible(false)} className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
+                                    <Eye size={18} className="text-gray-400" />
+                                </button>
+                            </div>
+                            :<div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                <button type="button" onClick={()=>setPasswordVisible(true)} className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
+                                    <EyeOff size={18} className="text-gray-400" />
+                                </button>
+                            </div>
+                        }
+                    </div>
                     {errors.password && <p className='text-red-500 text-sm'>{errors.password.message}</p>}
-                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                    <button type="button" className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none">
-                        <Eye size={18} className="text-gray-400" />
-                    </button>
-                    </div>
-                </div>
                 </div>
 
                 {/* Name Input */}
                 {
                 isSignin ? "" 
                 : <div className="mb-5">
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Name
-                    </label>
-                    <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <User size={18} className="text-gray-400" />
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Name
+                        </label>
+                        <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <User size={18} className="text-gray-400" />
+                            </div>
+                            <input
+                            {...register('name',{ required: 'Name is required' })}
+                            type="text"
+                            id="text"
+                            className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-gray-900 dark:text-white bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:placeholder-gray-500 transition-all duration-200"
+                            placeholder="name"
+                            />
+                            
                         </div>
-                        <input
-                        {...register('name',{ required: 'Name is required' })}
-                        type="text"
-                        id="text"
-                        className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-gray-900 dark:text-white bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400 dark:placeholder-gray-500 transition-all duration-200"
-                        placeholder="name"
-                        />
                         {errors.name && <p className='text-red-500 text-sm'>{errors.name.message}</p>}
-                    </div>
                     </div> 
                 }
                 

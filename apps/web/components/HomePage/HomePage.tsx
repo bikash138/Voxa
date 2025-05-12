@@ -35,7 +35,7 @@ const HomePage = () => {
 
   return (
     <>
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <main className="w-full mx-auto px-4 sm:px-6 lg:px-8">
             {/* Hero Section */}
             <div className="py-20 text-center">
             <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-blue-500 to-purple-600 inline-block text-transparent bg-clip-text">
@@ -47,15 +47,17 @@ const HomePage = () => {
             </p>
             <div className="flex gap-4 justify-center">
                 <Link href="/signin">
-                <button 
-                    
-                    className="cursor-pointer bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-3 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-blue-500/20">
-                        Get Started
-                </button>
+                    <button 
+                        
+                        className="cursor-pointer bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-3 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-blue-500/20">
+                            Sign In
+                    </button>
                 </Link>
-                <button className=" cursor-pointer bg-gray-800 hover:bg-gray-700 text-white px-8 py-3 rounded-lg font-medium transition-colors border border-gray-700 hover:border-gray-600">
-                Learn More
-                </button>
+                <Link href="/signup">
+                    <button className=" cursor-pointer bg-gray-800 hover:bg-gray-700 text-white px-8 py-3 rounded-lg font-medium transition-colors border border-gray-700 hover:border-gray-600">
+                        Sign Up
+                    </button>
+                </Link>
             </div>
             </div>
             
