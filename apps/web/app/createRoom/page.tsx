@@ -11,7 +11,7 @@ import { toast } from 'sonner'
 const page = () => {
 
     const {
-        CREATE_ROOM
+        CREATE_ROOM_API
     } = roomEndpoints
 
     interface FormValues {
@@ -30,7 +30,7 @@ const page = () => {
         try{
             const toastId = toast.loading("Loading...")
             const token = localStorage.getItem("token")
-            const response = await apiConnector("POST", CREATE_ROOM, formData,
+            const response = await apiConnector("POST", CREATE_ROOM_API, formData,
                 {
                     Authorization: `${token}`
                 } as AxiosRequestHeaders

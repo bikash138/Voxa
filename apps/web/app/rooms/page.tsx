@@ -13,20 +13,25 @@ import { clearUser } from '@/redux/slices/userSlice';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import logo from "../../assets/logo.png"
+import { useForm } from 'react-hook-form';
 
 function App() {
   const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
   const [rooms, setRooms] = useState<Room[]>([])
   const [searchTerm, setSearchTerm] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [confirmationModal, setConfirmationModal] = useState(false)
+  const [isLogoutModalOpen, setLogoutModalOpen] = useState(false)
+  const [isCreateRoomModal, setCreateRoomModal] = useState(false)
+  const [isJoinRoomModal, setJoinRoomModal] = useState(false)
   const [activeCategory, setActiveCategory] = useState<RoomCategory>('all');
 
+  
+  
   const dispatch = useDispatch()
   const router = useRouter()
   const {
     USER_ROOM_DETAILS_API
   } = userEndpoints
+  
 
   useEffect(()=>{
     const token = localStorage.getItem('token')
@@ -117,11 +122,13 @@ function App() {
                 </div>
                 
                 <div className="flex flex-col space-y-6">
-                <button className="w-10 h-10 rounded-xl flex items-center justify-center bg-gray-800 text-purple-500 transition-all duration-200 hover:bg-gray-700">
+                <button className="cursor-pointer w-10 h-10 rounded-xl flex items-center justify-center bg-gray-800 text-purple-500 transition-all duration-200 hover:bg-gray-700">
                     <MessageCircle size={20} />
                 </button>
-                <button className="w-10 h-10 rounded-xl flex items-center justify-center text-gray-400 transition-all duration-200 hover:bg-gray-800 hover:text-white">
-                    <Users size={20} />
+                <button 
+                  onClick={()=>setJoinRoomModal(true)}
+                  className="cursor-pointer w-10 h-10 rounded-xl flex items-center justify-center text-gray-400 transition-all duration-200 hover:bg-gray-800 hover:text-white">
+                    <Plus size={20} />
                 </button>
                 <button className="w-10 h-10 rounded-xl flex items-center justify-center text-gray-400 transition-all duration-200 hover:bg-gray-800 hover:text-white">
                     <Settings size={20} />
@@ -131,7 +138,7 @@ function App() {
             
             <div className="flex flex-col items-center space-y-6">
                 <button 
-                onClick={()=>setConfirmationModal(true)}
+                onClick={()=>setLogoutModalOpen(true)}
                 className="cursor-pointer w-10 h-10 rounded-xl flex items-center justify-center text-gray-400 transition-all duration-200 hover:bg-gray-800 hover:text-red-500">
                     <LogOut size={20} />
                 </button>
@@ -249,14 +256,12 @@ function App() {
             </div>
             
             <div className="p-4 border-t border-gray-800">
-                
-                <button 
-                onClick={()=>setIsModalOpen(true)}
-                className="cursor-pointer w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg py-2 px-4 flex items-center justify-center transition-colors duration-200">
-                <Plus size={18} className="mr-2" />
-                Create New Room
-                </button>
-                
+              <button 
+              onClick={()=>setCreateRoomModal(true)}
+              className="cursor-pointer w-full bg-purple-600 hover:bg-purple-700 text-white rounded-lg py-2 px-4 flex items-center justify-center transition-colors duration-200">
+              <MessageSquareMore size={18} className="mr-2" />
+              Join Room
+              </button> 
             </div>
             </div>
         </div>
@@ -279,28 +284,38 @@ function App() {
         </div>
 
         <FormModal
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onSubmit={() => {
-            }}
-            title="Create Room"
-            placeholder='Enter your slug'
-            confirmText = 'Create Room'
-            cancelText = 'Cancel'
+          isOpen={isJoinRoomModal}
+          onClose={() => setJoinRoomModal(false)}
+          title="Join Room"
+          placeholder='Enter your slug'
+          use='joinRoom'
+          confirmText = 'Join Room'
+          cancelText = 'Cancel'
         />
+
+        <FormModal
+          isOpen={isCreateRoomModal}
+          onClose={() => setCreateRoomModal(false)}
+          title="Create Room"
+          placeholder='Enter your slug'
+          use='createRoom'
+          confirmText = 'Create Room'
+          cancelText = 'Cancel'
+        />
+        //LOGOUT
         <ConfirmationModal
-        isOpen={confirmationModal}
-        onClose={() => setConfirmationModal(false)}
-        onConfirm={() => {
-          localStorage.removeItem('token')
-          dispatch(clearUser())
-          router.push("/")
-        }}
-        title="Logout"
-        message= "Do you really want to logout?"
-        confirmText = 'Logout'
-        cancelText = 'Cancel'
-      />
+          isOpen={isLogoutModalOpen}
+          onClose={() => setLogoutModalOpen(false)}
+          onConfirm={() => {
+            localStorage.removeItem('token')
+            dispatch(clearUser())
+            router.push("/")
+          }}
+          title="Logout"
+          message= "Do you really want to logout?"
+          confirmText = 'Logout'
+          cancelText = 'Cancel'
+        />
     </>
   );
 }

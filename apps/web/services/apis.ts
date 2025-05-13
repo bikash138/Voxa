@@ -9,6 +9,6 @@ export const userEndpoints = {
     USER_ROOM_DETAILS_API: BASE_URL + "/getAllUserRooms"
 }
 export const roomEndpoints = {
-    JOIN_ROOM: BASE_URL + "/joinRoom",
-    CREATE_ROOM: BASE_URL + "/createRoom"
+    JOIN_ROOM_API: BASE_URL + "/joinRoom",
+    CREATE_ROOM_API: BASE_URL + "/createRoom"
 }

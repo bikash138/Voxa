@@ -11,7 +11,7 @@ import { toast } from 'sonner'
 const page = () => {
     //ENDPOINTS
     const {
-        JOIN_ROOM
+        JOIN_ROOM_API
     } = roomEndpoints
 
     //INTERFACES
@@ -31,7 +31,7 @@ const page = () => {
         try{
             const toastId = toast.loading("Loading...")
             const token = localStorage.getItem("token")
-            const response = await apiConnector("GET", `${JOIN_ROOM}/${formData.slug}`, undefined,
+            const response = await apiConnector("GET", `${JOIN_ROOM_API}/${formData.slug}`, undefined,
                 {
                     Authorization: `${token}`
                 } as AxiosRequestHeaders
