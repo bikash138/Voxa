@@ -43,6 +43,7 @@ const FormModal: React.FC<FormModalProps> = ({
         onClose()
       }else{
         joinRoom(formData, router)
+        onClose()
       }
       reset()
     }
@@ -52,7 +53,7 @@ const FormModal: React.FC<FormModalProps> = ({
     return (
 
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-3xl flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-gradient-to-b from-gray-800 to-gray-900 rounded-xl shadow-xl w-full max-w-md relative animate-fade-in">
             <div className="p-6 border-b border-gray-700">
               <div className="flex items-center justify-between">

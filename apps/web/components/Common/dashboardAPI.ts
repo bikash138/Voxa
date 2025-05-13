@@ -25,7 +25,7 @@ export const joinRoom = async (formData, router) => {
                 console.log(`Room ${formData.slug} with roomId ${roomId} Joined Successfully`)
             }
             toast.dismiss(toastId)
-            router.push(`/chat/${roomId}`)
+            router.push(`/rooms/chat/${roomId}`)
         }
         catch(error){
             console.log("Error while Joining Room")

@@ -65,7 +65,7 @@ const Dashboard = () => {
                 </Link>
 
                 {/* Delete Room */}
-                <Link href="/deleteRoom">
+                <Link href="/rooms">
                   <button
                         className="w-full mt-4 mb-4 cursor-pointer flex justify-center items-center 
                                 py-2.5 px-4 bg-pink-500 hover:bg-pink-700 focus:ring-4 
