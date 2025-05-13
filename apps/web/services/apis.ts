@@ -6,6 +6,7 @@ export const authEndpoints = {
 }
 export const userEndpoints = {
     USER_DETAILS_API: BASE_URL + "/userDetails",
+    USER_ROOM_DETAILS_API: BASE_URL + "/getAllUserRooms"
 }
 export const roomEndpoints = {
     JOIN_ROOM: BASE_URL + "/joinRoom",

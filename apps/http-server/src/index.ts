@@ -4,7 +4,6 @@ import express from 'express'
 import cors from "cors"
 import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken"
-import { redisClient } from "@repo/redis/redisClient"
 import middleware from "./middleware"
 const JWT_SECRET = 'bikash'
 
@@ -182,19 +181,30 @@ app.get("/userDetails", middleware, async (req,res)=>{
     }
 })
 
-
-// app.get("/redis", async (req,res)=>{
-//     await redisClient.lpush("messages", 1)
-//     await redisClient.lpush("messages", 2)
-//     await redisClient.lpush("messages", 3)
-//     await redisClient.lpush("messages", 4)
-//     // const result = await redisClient.rpop("messages")
-//     const result = await redisClient.llen("messages")
-//     console.log(result)
-//     res.status(200).json({
-//         result
-//     })
-// })
+app.get("/getAllUserRooms", middleware, async (req,res)=>{
+    try{
+        //@ts-ignore
+        const userId = req?.userId
+        if(!userId){
+            throw new Error ("User unauthenticated")
+            return
+        }
+        const userRooms = await prismaClient.room.findMany({
+            where:{
+                adminId: userId
+            }
+        })
+        res.status(200).json({
+            message: "All User Rooms Fetched",
+            userRooms
+        })
+    }catch(error){
+        console.log(error)
+        res.status(500).json({
+            message: "Internal Server Error"
+        })
+    }
+})
 
 const PORT = process.env.PORT || 4000
 app.listen(4000, '0.0.0.0', ()=>{
